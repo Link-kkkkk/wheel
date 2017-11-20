@@ -16,9 +16,6 @@ export default {
     }
   },
   mounted() {
-    this.$common.common.resizeWindow();
-    this.$common.common.init(this.href);
-
     var _this = this
 
     var fetchUrl = _this.$common.common._ACTHOST + '/base/Api/actInfo'
@@ -41,6 +38,8 @@ export default {
     fetch(fetchTar).then(response => response.json())
       .then(data => console.log(data))
       .catch(e => console.log("Oops, error", e))
+
+      setTimeout()
   },
   methods: {
 
@@ -50,6 +49,7 @@ export default {
     preload
   }
 }
+
 </script>
 <style lang="less" scoped>
 @import './../assets/common/reset.less';

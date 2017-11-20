@@ -111,6 +111,7 @@
     isQZ && _initQZ(opts);
   }
   if (typeof define === "function" && (define.cmd || define.amd)) {
+
     if (define.cmd) {
       require = seajs.use;
     } else {

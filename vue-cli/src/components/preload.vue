@@ -54,7 +54,7 @@ export default {
 .stressing span {
   width: 100px;
   height: 120px;
-  background: url(./../assets/img/loading.gif) left top no-repeat;
+  background: url(./../assets/img/common/loading.gif) left top no-repeat;
   background-size: 100px;
   position: absolute;
   left: 50%;

@@ -6,11 +6,11 @@ import qqShare from './qqShare' //注意路径
 import wx from 'weixin-js-sdk'
 
 
-// 配置参数
-const _HOST = 'https://app.hxsapp.com';
-const _ACTHOST = 'https://act.hxsapp.com';
+//判断是否测试环境
+var _HOST = 'https://app.hxsapp.com';
+var _ACTHOST = 'https://act.hxsapp.com';
 
-const modelIdfa = $_GET('model_idfa');
+var modelIdfa = $_GET('model_idfa');
 var CallBack = '?callback=?' + '&model_idfa=' + modelIdfa;
 export { _HOST, _ACTHOST };
 
@@ -38,8 +38,8 @@ export function $_GET(key) {
     return false;
   }
 
-  p = p[1].split('#')
-  p = p[0].split('&')
+  p = p[1].split('#');
+  p = p[0].split('&');
   p.map(function (item) {
     var temp = item.split('=');
     if (temp[0] == key) {
@@ -65,7 +65,7 @@ export function $_GET(key) {
 var locationSearch = window.location.href.split('?')[1];
 export function getUrlParam(name, param = locationSearch) {
   if (!param) return null;
-  var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+  var reg = new RegExp("(^|&)" + name + "=([^&]*)[(#|&|$)]");
   var r = param.match(reg);
   if (r != null) return unescape(r[2]);
   return null
@@ -95,19 +95,19 @@ export function preLoading(id, fn) {
 //判断好享瘦版本
 export var UserAgent = window.navigator.userAgent;
 export function myUserAgent(fn, state) {
-  var hxsVersion = getHxsAppVersion()
+  var hxsVersion = getHsxAppVersion()
   if (fn) {
     fn(hxsVersion);
   }
 }
 function moreMyUserAgent(fn, state) {
-  var hxsVersion = getHxsAppVersion()
+  var hxsVersion = getHsxAppVersion()
   if (fn) {
     fn(hxsVersion);
   }
 }
 
-export function getHxsAppVersion() {
+export function getHsxAppVersion() {
   //获取版本号
   var UserAgent = window.navigator.userAgent;
   var windowLocation = window.location.href;
@@ -202,11 +202,7 @@ export function compareAppVersion(new_str, old_str) {
 export function toastTip(obj, msg, time) {
   if (!msg) return;
   if (!time) { time = 1000 };
-  if (!obj) {
-    var target = $('.toast_tip');
-  } else {
-    var target = $(obj);
-  }
+  var target = $(obj);
   var sliceLength = 16;
   var sliceRate = Math.ceil(msg.length / 16);
   if (msg.length > sliceLength) {
@@ -391,29 +387,40 @@ var newLatitude = getUaparen('latitude');
 var newRegisterId = getUaparen('register_id');
 var newConversationId = getUaparen('conversation_id');
 var newUserId = getUaparen('user_id');
-export function buriedPoint(behavior, clickResults) {
-  var webtype = '';
-  moreMyUserAgent(function (Version) {
-    var MicroMessenger2 = new RegExp('MicroMessenger').test(UserAgent);
-    var type = MicroMessenger2 ? '微信' : '其他';
-    if (Version) {
-      webtype = 'APP内已设置类型';
-    } else {
-      webtype = type;
-    }
-  });
 
-  var json = {
-    'one_web': '/',
-    'two_web': '/',
-    'three_web': '/',
-    'columned': '/',
-    'behavior': behavior,
-    'click_results': clickResults,
-    'access_occurred_type': 'H5活动页面',
-    'access_occurred_type_id': $_GET('id'),
-    'statistical_type': '页面型',
-    'previous_web_type': webtype,
+export function newburiedPoint(json) {
+  var buriedPoint = json;
+  var params = '';
+
+  for (var key in buriedPoint) {
+    params += key + '=' + buriedPoint[key] + '&';
+  }
+
+  params = params.substring(0, params.length - 1);
+  var marsImg = new Image();
+  marsImg.src = 'https://mars.hxsapp.com/h5?' + params;
+}
+
+export function buriedPoint(behavior, clickResults) {
+  var newMobileSystem = getUaparen('mobile_system');
+  var newBrand = getUaparen('brand');
+  var newModel = getUaparen('model');
+  var newSystemResolution = getUaparen('system_resolution');
+  var newChannelNumber = getUaparen('channel_number');
+  var newVersionNumber = getUaparen('version_number');
+  var newNetworkEnvironment = getUaparen('network_environment');
+  var newLongitude = getUaparen('longitude');
+  var newLatitude = getUaparen('latitude');
+  var newRegisterId = getUaparen('register_id');
+  var newConversationId = getUaparen('conversation_id');
+  var newUserId = getUaparen('user_id');
+
+  //判断在那个场景打开页面
+  var MicroMessenger = new RegExp('MicroMessenger').test(ua);
+  var previousWebType = MicroMessenger? '微信': '其他';
+  if(isApp()) previousWebType = 'app内已设置类型';
+
+  var uaPoint = {
     'mobile_system': newMobileSystem,
     'brand': newBrand,
     'model': newModel,
@@ -424,56 +431,66 @@ export function buriedPoint(behavior, clickResults) {
     'longitude': newLongitude,
     'latitude': newLatitude,
     'register_id': newRegisterId,
-    'conversation_id': newConversationId,
-    'user_id': newUserId
+    'conversation_id':newConversationId,
+    'user_id': newUserId,
+    'previous_web_type': previousWebType
   }
-  $.getJSON('https://mars.hxsapp.com/h5' + CallBack, json, function (data) { });
+  var json = {
+    access_occurred_type: 110102,//发生访问的【页面】类型
+    access_occurred_type_id: $_GET('id'),//发生访问的【页面】类型ID
+    previous_event_type_obj: '',//【事件】对象类型
+    previous_event_type_obj_id: '',//【事件】对象类型ID
+    previous_content_sort: ''//【事件】事件参数
+  }
+  var buriedPoint = Object.assign(json,uaPoint);
+  var params = '';
+
+  for (var key in buriedPoint) {
+    params += key + '=' + buriedPoint[key] + '&';
+  }
+  params = params.substring(0, params.length - 1);
+
+  var marsImg = new Image();
+  marsImg.src = 'https://mars.hxsapp.com/h5?' + params;
+
+  // var webtype = '';
+  // moreMyUserAgent(function (Version) {
+  //   var MicroMessenger2 = new RegExp('MicroMessenger').test(UserAgent);
+  //   var type = MicroMessenger2 ? '微信' : '其他';
+  //   if (Version) {
+  //     webtype = 'APP内已设置类型';
+  //   } else {
+  //     webtype = type;
+  //   }
+  // });
+
+  // var json = {
+  //   'one_web': '/',
+  //   'two_web': '/',
+  //   'three_web': '/',
+  //   'columned': '/',
+  //   'behavior': behavior,
+  //   'click_results': clickResults,
+  //   'access_occurred_type': 'H5活动页面',
+  //   'access_occurred_type_id': $_GET('id'),
+  //   'statistical_type': '页面型',
+  //   'previous_web_type': webtype,
+  //   'mobile_system': newMobileSystem,
+  //   'brand': newBrand,
+  //   'model': newModel,
+  //   'system_resolution': newSystemResolution,
+  //   'channel_number': newChannelNumber,
+  //   'version_number': newVersionNumber,
+  //   'network_environment': newNetworkEnvironment,
+  //   'longitude': newLongitude,
+  //   'latitude': newLatitude,
+  //   'register_id': newRegisterId,
+  //   'conversation_id': newConversationId,
+  //   'user_id': newUserId
+  // }
+  // $.getJSON('https://mars.hxsapp.com/h5' + CallBack, json, function (data) { });
 }
 
-export function isApp() {
-  var shareType;
-  if (window.location.search.indexOf('shareType') >= 0) {
-    shareType = true
-  } else {
-    shareType = false
-  }
-
-  if (!shareType) {
-
-    var is_sess_token;
-    if (window.location.search.indexOf('sess_token') >= 0) {
-      is_sess_token = true;
-    } else {
-      is_sess_token = false;
-    }
-
-    var in_app;
-    if (getHxsAppVersion() === '0.0.0') {
-      in_app = false;
-    } else {
-      in_app = true;
-    }
-
-    if (in_app) {
-      if (is_sess_token) {
-        console.log("在app里，且已经登录了,Version:" + getHxsAppVersion())
-        return true
-      } else {
-        console.log("在app里，且没有登录,Version:" + getHxsAppVersion())
-        return false
-      }
-    } else {
-      console.log("当前在PC开发环境")
-      return false
-    }
-
-  } else {
-    //不是app
-    console.log("有shareType字段，在app外部")
-    return false
-  }
-
-}
 var h5CallAppAction = {
   hxsapp_visible_share_btn: function (obj) {
     var shareTitle = obj.shareTitle;
@@ -523,138 +540,4 @@ var h5CallAppAction = {
       console.log("本地开发pc环境，无法开启新页面的app分享协议")
     }
   }
-}
-
-export function resizeWindow() {
-  function e() {
-    var e = document.documentElement.clientWidth,
-      t = document.querySelector("html"),
-      f = e / 25;
-    window.fontSize = f;
-    t.style.fontSize = f + "px";
-  }
-  e(), window.addEventListener("resize", e);
-}
-
-const UA = window.navigator.userAgent;
-export var locationType = window.location.search.indexOf('sess_token');
-
-// var downloadHref = 'https://www.hxsapp.com/download'
-export function init(url) {
-  // 解释权
-  const UA = window.navigator.userAgent;
-  if (UA.indexOf('iPhone') != -1 || UA.indexOf('iPad') != -1) {
-    $('.notice').html('<p>活动最终解释权归好享瘦APP所有 </p><p>本活动与苹果公司无关</p>');
-  } else if (UserAgent.indexOf('Android') != -1) {
-    $('.notice').html('<p>活动最终解释权归好享瘦APP所有 </p>');
-  }
-
-  // 埋点
-  if ($_GET('shareType') == 1) {
-    buriedPoint('站外活动H5', '站外活动H5');
-  } else {
-    buriedPoint('H5活动页面', 'H5活动页面');
-  }
-
-  // 下载链接处理
-  var ua = window.navigator.userAgent;
-  var IsAndroid = new RegExp('Android').test(ua);
-  var isAndroidQQ = new RegExp('Mobile MQQBrowser').test(ua);
-  var MicroMessenger = new RegExp('MicroMessenger').test(ua);
-  var isIos = new RegExp('iPhone').test(ua);
-  var isIpad = new RegExp('iPad').test(ua);
-  var isIosQQ = new RegExp(' QQ/').test(ua);
-  var downloadHref = ((IsAndroid && isAndroidQQ && !MicroMessenger) || (isIos && isIosQQ) || (isIpad && isIosQQ)) ? 'https://www.hxsapp.com/download' : url;
-  $('.d_foot a').attr('href', downloadHref);
-
-  // rem
-  function e() {
-      var e = document.documentElement.clientWidth,
-          t = document.querySelector("html"),
-          f = e / 25;
-      window.fontSize = f;
-      t.style.fontSize = f + "px";
-  }
-  e(), window.addEventListener("resize", e);
-
-}
-
-export function getChannel(id) {
-  var ua = window.navigator.userAgent;
-  var IsAndroid = new RegExp('Android').test(ua);
-  var isAndroidQQ = new RegExp('Mobile MQQBrowser').test(ua);
-  var MicroMessenger = new RegExp('MicroMessenger').test(ua);
-
-  var isIos = new RegExp('iPhone').test(ua);
-  var isIpad = new RegExp('iPad').test(ua);
-  var isIosQQ = new RegExp(' QQ/').test(ua);
-  var head = 'http://app.hxsapp.com/html/channel_statistics.html?channel_id=' + id
-  if ((IsAndroid && isAndroidQQ && !MicroMessenger) || (isIos && isIosQQ) || (isIpad && isIosQQ)) {
-    head = 'https://www.hxsapp.com/download'
-  }
-  if (id == 'empty') {
-    head = 'https://www.hxsapp.com/download'
-  }
-  $('.d_foot a').attr('href', head)
-  return head
-}
-
-export function prevent() {
-  $("body").on("touchmove", function (event) {
-    event.preventDefault();
-  }, false)
-}
-
-export function checklogin(hre) {
-  var token = $_GET('sess_token');
-  if ($_GET('shareType') == 1) {
-    toastTip('.toast_tip', '快来下载好享瘦参加活动吧！', 2500);
-    setTimeout(function () {
-      window.location.href = hre;
-    }, 500)
-    return false;
-  } else if (token && token.length < 10 || (locationType != -1 && !token)) {
-    window.location.href = 'https://hxsapp_showloginpage';
-    // myUserAgent(function (Version) {
-    //     if (Version && (compareAppVersion(Version, "2.5.0") || Version == "2.5.0")) {
-    //         window.location.href = 'https://hxsapp_showloginpage';
-    //     }
-    // })
-    return false;
-  }
-}
-
-//分享方法
-export function shareFun(data, link, descr) {
-  //H5通知客户端显示分享按钮
-  var shareLink = data.link + '&shareType=1&';
-  var share_url = { share_url: window.location.href };
-  var shareTitle = data.title;
-  var shareImages = data.share_pic;
-  var shareDescr = data.descr;
-  var shareType = data.share_type;
-
-  if (link) {
-    shareLink = link + '&shareType=1&';
-  }
-  if (descr) {
-    shareDescr = descr
-  }
-
-  var Version = getHxsAppVersion();
-  //qq分享
-  $('#qqShareContent').attr('content', decodeURIComponent(shareTitle));
-  $('#qqShareDes').attr('content', '好享瘦APP  专享福利');
-  $('#qqShareImg').attr('content', shareImages);
-  //分享方法
-  // wxSecShare(shareTitle, shareDescr, shareLink, shareImages);
-
-  if ((compareAppVersion(Version, "2.6.0")) && Version) {
-    window.location.href = 'https://hxsapp_visible_act_share_btn#' + shareTitle + '#' + shareLink + '#' + shareImages + '#' + shareDescr + '#' + shareType;
-  } else if ((compareAppVersion(Version, "2.2.0") || Version == "2.2.0") && (!(compareAppVersion(Version, "2.6.0") || Version == "2.6.0")) && Version) {
-    window.location.href = 'https://hxsapp_visible_share_btn#' + shareTitle + '#' + shareLink + '#' + shareImages + '#' + shareDescr + '#' + shareType;
-  } else if ((compareAppVersion(Version, "2.1.0") || Version == "2.1.0") && Version) {
-    window.location.href = 'hxsapp://visible_share_btn|' + shareTitle + '|' + shareLink + '|' + shareImages + '|' + shareDescr + '|' + shareType;
-  }
-
 }

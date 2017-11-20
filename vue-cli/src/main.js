@@ -24,7 +24,7 @@ Vue.component(Loadmore.name, Loadmore);
 // lazyload配置
 Vue.use(Lazyload,{
   preLoad: 1.8,
-  loading: require('@/assets/img/loading.gif')
+  loading: require('@/assets/img/common/loading.gif')
 });
 
 // swiper

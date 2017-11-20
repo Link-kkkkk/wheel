@@ -6,7 +6,7 @@
   </transition>
 </template>
 <script>
-
+import com from './../util/common'
 export default {
   name: 'pv',
   data() {
@@ -18,7 +18,11 @@ export default {
   props: {
     pvData: {
       type: [Object, String],
-      default: ''
+      default: {
+        sess_token: null,
+        act_id: null,
+        model_idfa: null,
+      }
     },
   },
   mounted() {
@@ -30,7 +34,9 @@ export default {
     getPv() {
       var _this = this
       var json = {
-        act_id: _this.pvData.act_id
+        act_id: this.pvData.act_id,
+        sess_token: this.pvData.sess_token,
+        model_idfa: this.pvData.model_idfa
       }
       this.$http.jsonp(_this.$common.common._ACTHOST + '/base/Api/pv', { params: json })
         .then(function(data) {
@@ -44,7 +50,7 @@ export default {
       //触发parent组件v-on:post
       this.$emit('post')
     },
-    hidding () {
+    hidding() {
       this.pvShow = false
     }
   }

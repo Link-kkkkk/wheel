@@ -38,12 +38,12 @@ export default {
 
 <style>
 .noticeWarp {
-  color: #FFF;
+  color: #ccc;
   position: absolute;
   bottom: 0rem;
   width: 100%;
   text-align: center;
-  font-size: 12px;
+  font-size: 10px;
 }
 </style>
 

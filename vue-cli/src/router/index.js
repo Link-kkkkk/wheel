@@ -3,35 +3,36 @@ import Router from 'vue-router'
 
 // 页面
 import init from '../init.vue'
-// import bodyCardio from '../pages/bodyCardio.vue'
-// import outCardio from '../pages/outCardio.vue'
-// import outBong from '../pages/outBong.vue'
-// import milk from '../pages/milkshake.vue'
-// import milkDetail from '../pages/milkshake2.vue'
-// import mealPowder from '../pages/mealPowder.vue'
-// import bong from '../pages/bong.vue'
-const bongPage = resolve => require(['../pages/bong.vue'],resolve)
-const bodyCardio = resolve => require(['../pages/bodyCardio.vue'],resolve)
-const outBong = resolve => require(['../pages/outBong.vue'],resolve)
-const outCardio = resolve => require(['../pages/outCardio.vue'],resolve)
-const milk = resolve => require(['../pages/milkshake.vue'],resolve)
-const milkDetail = resolve => require(['../pages/milkshake2.vue'],resolve)
-const mealPowder = resolve => require(['../pages/mealPowder.vue'],resolve)
+// const bongPage = resolve => require(['../pages/bong.vue'],resolve)
+// const bodyCardio = resolve => require(['../pages/bodyCardio.vue'],resolve)
+// const outBong = resolve => require(['../pages/outBong.vue'],resolve)
+// const outCardio = resolve => require(['../pages/outCardio.vue'],resolve)
+// const milk = resolve => require(['../pages/milkshake.vue'],resolve)
+// const milkDetail = resolve => require(['../pages/milkshake2.vue'],resolve)
+// const mealPowder = resolve => require(['../pages/mealPowder.vue'],resolve)
 
 import error from '../pages/error.vue'
 import index from '../pages/index.vue'
+
+import seckill from '@/pages/seckill.vue'
+import invite from '@/pages/inviteFriend.vue'
 
 // demo
 import vuegPage from '@/pages/vueg.vue'
 import fetchPage from '@/pages/fetchDemo.vue'
 import loadmore from '@/pages/mintLoadmore.vue'
 import slotDemo from '@/pages/slotDemo.vue'
+import promiseDemo from '@/pages/promise.vue'
+
 Vue.use(Router)
 export default new Router({
+  mode:'history',
+  base:'/',
   routes: [
     {
+      // nginx路径
       path: '/',
-      redirect: '/index/vueg'
+      redirect: '/vueg'
     },
     {
       path: '/index/:type',
@@ -54,44 +55,14 @@ export default new Router({
       component: loadmore
     },
     {
+      path: '/promiseDemo',
+      name: 'promiseDemo',
+      component: promiseDemo
+    },
+    {
       path: '/slotDemo',
       name: 'slotDemo',
       component: slotDemo
-    },
-    {
-      path: '/bodyCardio',
-      name: 'bodyCardio',
-      component: bodyCardio
-    },
-    {
-      path: '/bong',
-      name: 'bong',
-      component: bongPage
-    },
-    {
-      path: '/outCardio',
-      name: 'outCardio',
-      component: outCardio
-    },
-    {
-      path: '/outBong',
-      name: 'outBong',
-      component: outBong
-    },
-    {
-      path: '/milk',
-      name: 'milk',
-      component: milk,
-    },
-    {
-      path: "/milkDetail",
-      name: 'milkDetail',
-      component: milkDetail
-    },
-    {
-      path: "/mealPowder",
-      name: 'mealPowder',
-      component: mealPowder
     },
     {
       path: '*',
