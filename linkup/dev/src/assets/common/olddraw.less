@@ -1,0 +1,161 @@
+.warp{
+  .back(100%, 40.2rem,'../img/draw/drawBg.jpg');
+  position: relative;
+}
+.panBorder{
+  .back(17.5rem, 17.5rem,'../img/draw/panborder.png');
+  .center(17.5rem);
+  position: absolute;
+  top: 3rem;
+}
+.pan{
+  .back(14.8rem, 14.8rem,'../img/draw/pan.png');
+  .center(14.7rem);
+  position: absolute;
+  top: 4.4rem;
+  transition: transform 6s;
+}
+.drawBtn{
+  .back(5.033333rem, 6.3rem,'../img/draw/drawBtn.png');
+  .center(5rem);
+  position: absolute;
+  top: 8rem;
+}
+.shadow{
+  .back(12.833333rem, 1.766667rem,'../img/draw/shadow.png');
+  .center(12.8rem);
+  position: absolute;
+  top: 20rem;
+}
+.rewardArea{
+  .back(20.6rem, 13.266667rem,'../img/draw/awardList.png');
+  .center(20.6rem);
+  position: absolute;
+  top: 23rem;
+}
+.rewardBox{
+  width: 18.466667rem;
+  height: 8.6rem;
+  .center(18.46rem);
+  top: 3.2rem;
+  position: absolute;
+  overflow: hidden;
+  li {
+    height: 1.72rem;
+    line-height: 1.72rem;
+    display: flex;
+    display: -webkit-flex;
+    justify-content: space-between;
+    position: relative;
+    p{
+      font-size: .866667rem;
+    }
+    p:nth-child(1){
+      width: 40%;
+    }
+    p:nth-child(3){
+      width: 40%;
+      text-align: right;
+    }
+  }
+}
+.rewardLineBg{
+  background: rgba(120,0,0,.2);
+}
+.shareBox{
+  .back(17.766667rem, 18.833333rem, '../img/draw/layerShare.png');
+  .center(17.766667rem);
+  position: absolute;
+  top: 8rem;
+  .boxBtn{
+    .back(9.866667rem, 3.233333rem, '../img/draw/btnShare.png');
+    .center(9.866667rem);
+    position: absolute;
+    top: 13.666667rem;
+  }
+}
+.shareFrame{
+  .back(100%, 31.666667rem, '../img/draw/shareFrame.png');
+  position: absolute;
+  top: 0;
+}
+.reBox{
+  .back(17.766667rem, 18.833333rem, '../img/draw/layerRe.png');
+  .center(17.766667rem);
+  position: absolute;
+  top: 8rem;
+  .boxBtn{
+    .back(9.866667rem, 3.233333rem, '../img/draw/btnRe.png');
+    .center(9.866667rem);
+    position: absolute;
+    top: 13rem;
+  }
+}
+.inBox{
+  .back(17.766667rem, 18.833333rem, '../img/draw/layerIn.png');
+  .center(17.766667rem);
+  position: absolute;
+  top: 8rem;
+  .boxBtn{
+    .back(9.866667rem, 3.233333rem, '../img/draw/btnShow.png');
+    .center(9.866667rem);
+    position: absolute;
+    top: 13.666667rem;
+  }
+  p:nth-child(1){
+    font-weight: 600;
+    color: #ffec45;
+    width: 100%;
+    text-align: center;
+    margin-top: 4rem;
+  }
+  .imgBox{
+    width: 100%;
+    text-align: center;
+    img{
+      display: inline-block;
+      width: 7.5rem;
+      height: 7.5rem;
+      margin-top: .2rem;
+    }
+  }
+}
+.notBox{
+  .back(17.766667rem, 18.833333rem, '../img/draw/layerNot.png');
+  .center(17.766667rem);
+  position: absolute;
+  top: 8rem;
+  .boxBtn{
+    .back(9.866667rem, 3.233333rem, '../img/draw/btnRe.png');
+    .center(9.866667rem);
+    position: absolute;
+    top: 13rem;
+  }
+}
+.edBox{
+  .back(17.766667rem, 18.833333rem, '../img/draw/layerEd.png');
+  .center(17.766667rem);
+  position: absolute;
+  top: 8rem;
+  .boxBtn{
+    .back(9.866667rem, 3.233333rem, '../img/draw/btnRe.png');
+    .center(9.866667rem);
+    position: absolute;
+    top: 13rem;
+  }
+}
+.closeBtn_2{
+  .back(2rem, 2rem, '../img/close.png');
+  .center(2rem);
+  position: absolute;
+  top: 28.333333rem;
+}
+/*animate*/
+@keyframes slowroll {
+  0% {
+    transform:rotate(0deg);
+  }
+  100% {
+    transform:rotate(-360deg);
+  }
+}
