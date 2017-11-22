@@ -1,8 +1,8 @@
 <template>
   <div class="warp">
     <div class='pv' v-if='pvshow'><p>{{pvnum}}</p></div>
-    <img v-for='(data,index) in HeadimgArr' :src='HeadimgArr[index]' :key="index">
-    <img v-for='(data,index) in imgArr' v-lazy='imgArr[index]' :key="index">
+    <img v-for='(data,index) in HeadimgArr' :src='HeadimgArr[index]'>
+    <img v-for='(data,index) in imgArr' v-lazy='imgArr[index]'>
     <div class="btn" @click="goBuy">立即购买</div>
     <share-info :act-data='actData'></share-info>
   </div>
