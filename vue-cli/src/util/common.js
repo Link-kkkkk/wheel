@@ -373,14 +373,50 @@ var newConversationId = getUaparen('conversation_id');
 var newUserId = getUaparen('user_id');
 
 export function newburiedPoint(json) {
-  var buriedPoint = json;
+  var ua = window.navigator.userAgent;
+  //判断是非在app里的方法
+
+  var newMobileSystem = com.getUaparen('mobile_system');
+  var newBrand = com.getUaparen('brand');
+  var newModel = com.getUaparen('model');
+  var newSystemResolution = com.getUaparen('system_resolution');
+  var newChannelNumber = com.getUaparen('channel_number');
+  var newVersionNumber = com.getUaparen('version_number');
+  var newNetworkEnvironment = com.getUaparen('network_environment');
+  var newLongitude = com.getUaparen('longitude');
+  var newLatitude = com.getUaparen('latitude');
+  var newRegisterId = com.getUaparen('register_id');
+  var newConversationId = com.getUaparen('conversation_id');
+  var newUserId = com.getUaparen('user_id');
+
+  //判断在那个场景打开页面
+  var MicroMessenger = new RegExp('MicroMessenger').test(ua);
+  var previousWebType = MicroMessenger ? '微信' : '其他';
+  if (com.isApp()) previousWebType = 'app内已设置类型';
+
+  var uaPoint = {
+    'mobile_system': newMobileSystem,
+    'brand': newBrand,
+    'model': newModel,
+    'system_resolution': newSystemResolution,
+    'channel_number': newChannelNumber,
+    'version_number': newVersionNumber,
+    'network_environment': newNetworkEnvironment,
+    'longitude': newLongitude,
+    'latitude': newLatitude,
+    'register_id': newRegisterId,
+    'conversation_id': newConversationId,
+    'user_id': newUserId,
+    'previous_web_type': previousWebType
+  }
+  var buriedPoint = Object.assign(json, uaPoint);
   var params = '';
 
   for (var key in buriedPoint) {
     params += key + '=' + buriedPoint[key] + '&';
   }
-
   params = params.substring(0, params.length - 1);
+  // console.log(params)
   var marsImg = new Image();
   marsImg.src = 'https://mars.hxsapp.com/h5?' + params;
 }
@@ -422,6 +458,72 @@ export function buriedPoint(behavior, clickResults) {
     'user_id': newUserId
   }
   $.getJSON('https://mars.hxsapp.com/h5' + CallBack, json, function (data) { });
+}
+
+// 接入深度链接库linkedme框架
+
+var linkedMe = function (__data = {}) {
+  // debugger
+  // 给默认值
+  __data.domText = __data.domText ? __data.domText : "下载并打开APP";
+  __data.domId = __data.domId ? __data.domId : "LinkedMeDom";
+
+  var __linkedme_key = "69aff539eac106c3ef597454a7c319ed"
+
+  var __type = (process.env.NODE_ENV === 'production') ? "live" : "test";
+  linkedme.init(__linkedme_key, { type: __type }, null);
+
+  // 处理传入进来的参数
+  var data = Object.assign({}, __data);
+  data.type = __type;  //表示现在使用线上模式,如果填写"test", 表示测试模式.【可选】
+  // data.feature = "功能名称"; // 自定义深度链接功能，多个用逗号分隔，【可选】
+  // data.stage = "阶段名称"; // 自定义深度链接阶段，多个用逗号分隔，【可选】
+  // data.channel = "渠道名称"; // 自定义深度链接渠道，多个用逗号分隔，【可选】
+  // data.tags = "标签名称"; // 自定义深度链接标签，多个用逗号分隔，【可选】
+  // data.ios_custom_url = ""; // 自定义iOS平台下App的下载地址，如果是AppStore的下载地址可以不用填写，【可选】
+  // data.ios_direct_open = ""; //未安装情况下，设置为true为直接打开ios_custom_url，默认为false【可选】
+  // data.android_custom_url = "";// 自定义安卓平台下App的下载地址，【可选】
+  // data.android_direct_open = ""; //设置为true，所有情况下跳转android_custom_url，默认为false【可选】
+  // 下面是自定义深度链接参数，用户点击深度链接打开app之后，params的参数会通过LinkedME服务器透传给app，由app根据参数进行相关跳转
+  // 例如：详情页面的参数，写入到params中，这样在唤起app并获取参数后app根据参数跳转到详情页面
+  // var value1 = 1;
+  // var value2 = 2;
+
+  // data.params = '{"key1":"'+value1+'","key2":"'+value2+'"}'; //注意单引号和双引号的位置
+  data.params = '{"key":"' + data.params.key + '"}'; //注意单引号和双引号的位置
+
+  console.log("__data.params:" + JSON.stringify(__data.params))
+  console.log("__data.domText:" + __data.domText)
+  console.log("__data.domId:" + __data.domId)
+
+  console.log("data.params:" + data.params)
+  // debugger
+
+  linkedme.link(data, function (err, response) {
+    if (err) {
+      // 生成深度链接失败，返回错误对象err
+      return "error"
+    } else {
+      /*
+        生成深度链接成功，深度链接可以通过data.url得到，
+        将深度链接绑定到<a>标签，这样当用户点击这
+        个深度链接，如果是在pc上，那么跳转到深度链接二维
+        码页面，用户用手机扫描该二维码就会打开app；如果
+        在移动端，深度链接直接会根据手机设备类型打开ios
+        或者安卓app
+        */
+      document.getElementById(__data.domId).innerHTML = '<a class="linkedme" href="' + response.url + '">' + __data.domText + '</a>'
+
+      document.getElementById(__data.domId).style.display = "block"
+
+      // window.linkedme_url = response.url
+      // debugger
+      // return response.url
+      // document.getElementById(domId).href = response.url;
+
+    }
+  }, false);
+
 }
 
 var h5CallAppAction = {
@@ -474,12 +576,81 @@ var h5CallAppAction = {
     }
   }
 }
+//判断是非在app里的方法
+function isApp() {
+  var is_sess_token;
+  if (window.location.search.indexOf('sess_token') >= 0) {
+    is_sess_token = true;
+  } else {
+    is_sess_token = false;
+  }
 
+  var shareMode;
+  if (window.location.search.indexOf('shareType') >= 0) {
+    shareMode = true;
+  } else {
+    shareMode = false;
+  }
+
+  // app下面的调试模式
+  if ((window.location.search.indexOf('shareType') >= 0 && getUrlParam('shareType') == 1) || is_sess_token) {
+    console.log("在app里")
+    return true
+  } else {
+    console.log("不在app里")
+    return false
+  }
+
+}
+
+// 判断是否登录的方法
+function isLogin() {
+
+  var is_sess_token;
+  // 坑：安卓下面app，没有登录的时候，sess_token＝null
+
+  if (getUrlParam("sess_token") &&
+    getUrlParam("sess_token").length != 0 &&
+    getUrlParam("sess_token").length > 4
+  ) {
+    is_sess_token = true;
+  } else {
+    is_sess_token = false;
+  }
+
+  if (is_sess_token) {
+    console.log("在app里，且已经登录了")
+    return true
+  } else {
+    console.log("在app里，且没有登录了")
+    return false
+  }
+}
+function checklogin(hre) {
+  let token = $_GET('sess_token');
+
+  if (!isApp || $_GET('shareType') == 1) {
+    toastTip('快来下载好享瘦参加活动吧！', 1500);
+    setTimeout(function () {
+      window.location.href = hre;
+    }, 500)
+    return false;
+  } else if (token && token.length < 10) {
+    window.location.href = 'https://hxsapp_showloginpage';
+    return false;
+  } else {
+    return true
+  }
+}
 var com = {
   $_GET,
   newburiedPoint,
   toastTip,
-  getHxsAppVersion
+  getHxsAppVersion,
+  checklogin,
+  getUaparen,
+  isApp,
+  linkedMe
   // subStlength,
   // outSideShare,
   // buriedPoint,

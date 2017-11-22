@@ -9,7 +9,12 @@ import com from './../util/common'
 export default {
   name: 'shareInfo',
   props: {
-    actData: [Object, String]
+    actData: [Object, String],
+    default: {
+      sess_token: null,
+      act_id: null,
+      model_idfa: null,
+    }
   },
   mounted() {
     this.$nextTick(() => {
@@ -18,10 +23,13 @@ export default {
   },
   methods: {
     share() {
-      // console.log(setShareInfo)
+      // console.log('setShareInfo')
       var _this = this
       var json = {
-        act_id: _this.actData.act_id
+        act_id: this.actData.act_id,
+        sess_token: this.actData.sess_token,
+        model_idfa: this.actData.model_idfa,
+        link: this.actData.link
       }
       this.$http.jsonp('https://act.hxsapp.com' + '/base/Api/actInfo', { params: json })
         .then(function(data) {
@@ -41,7 +49,7 @@ export default {
             if (_this.actData.descr) {
               shareDescr = _this.actData.descr
             }
-
+            console.log(_this.actData)
             var Version = com.getHxsAppVersion();
 
             //qq分享

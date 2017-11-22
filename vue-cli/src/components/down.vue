@@ -6,8 +6,13 @@
         <div class="bg"></div>
         <div class="down_main">
           <div class="logo"></div>
-          <div class="text">好享瘦,专业瘦</div>
-          <a :href="downLink">下载APP</a>
+          <div class="text">我瘦了,你随意</div>
+          <!-- <a :href="downLink">下载APP</a> -->
+          <div id="LinkedMeDom">
+            <!--
+      						<a id="LinkedMeDom">下载APP</a>
+      										-->
+          </div>
         </div>
         <div class="share-img" v-if="shareImgShow && shareImgStyle" @click="downHxs()" :style="shareImgStyle"></div>
       </div>
@@ -27,19 +32,21 @@ export default {
       shareSeizeSeatStyle: null,
       downShow: false,
       shareImgLink: '',
-      buriedjson: {
-        access_occurred_type: 110102,//发生访问的【页面】类型
-        access_occurred_type_id: com.$_GET('id'),//发生访问的【页面】类型ID
-        previous_event_type_obj: '',//【事件】对象类型
-        previous_event_type_obj_id: '',//【事件】对象类型ID
-        previous_content_sort: ''//【事件】事件参数
-      },
+      // buriedjson: {
+      //   access_occurred_type: 110102,//发生访问的【页面】类型
+      //   access_occurred_type_id: com.$_GET('id'),//发生访问的【页面】类型ID
+      //   previous_event_type_obj: '',//【事件】对象类型
+      //   previous_event_type_obj_id: '',//【事件】对象类型ID
+      //   previous_content_sort: ''//【事件】事件参数
+      // },
     }
   },
   props: {
-    downData: {
-      type: [Object, String],
-      default: ''
+    linkedMe: {
+      type: Object,
+      default: function() {
+        return {}
+      }
     },
     donwLink: {
       type: [String],
@@ -49,9 +56,9 @@ export default {
   mounted() {
     this.hxsDownload();
     this.install()
-    if (this.downData.url) {
-      this.downLink = this.downData.url
-    }
+    // if (this.downData.url) {
+    //   this.downLink = this.downData.url
+    // }
     if (this.$common.common.$_GET('shareType') == 1) {
       this.downShow = true
     }
@@ -60,30 +67,31 @@ export default {
     this.$nextTick(() => {
       $('.d_foot').hide();
     })
+    // console.log(this.linkedMe)
   },
   methods: {
     hxsDownload() {
-      var ua = window.navigator.userAgent;
-      var IsAndroid = new RegExp('Android').test(ua);
-      var isAndroidQQ = new RegExp('Mobile MQQBrowser').test(ua);
-      var MicroMessenger = new RegExp('MicroMessenger').test(ua);
+      // var ua = window.navigator.userAgent;
+      // var IsAndroid = new RegExp('Android').test(ua);
+      // var isAndroidQQ = new RegExp('Mobile MQQBrowser').test(ua);
+      // var MicroMessenger = new RegExp('MicroMessenger').test(ua);
 
-      var isIos = new RegExp('iPhone').test(ua);
-      var isIpad = new RegExp('iPad').test(ua);
-      var isIosQQ = new RegExp(' QQ/').test(ua);
+      // var isIos = new RegExp('iPhone').test(ua);
+      // var isIpad = new RegExp('iPad').test(ua);
+      // var isIosQQ = new RegExp(' QQ/').test(ua);
 
 
-      if (isIos || isIpad) {
-        // this.downLink = 'https://at.umeng.com/5viObq';
-        this.downLink = 'https://www.hxsapp.com/download';
-      } else if (IsAndroid) {
-        // this.downLink = 'https://at.umeng.com/aCKnSD';
-        this.downLink = 'https://www.hxsapp.com/download';
-      }
+      // if (isIos || isIpad) {
+      //   // this.downLink = 'https://at.umeng.com/5viObq';
+      //   this.downLink = 'https://www.hxsapp.com/download';
+      // } else if (IsAndroid) {
+      //   // this.downLink = 'https://at.umeng.com/aCKnSD';
+      //   this.downLink = 'https://www.hxsapp.com/download';
+      // }
 
-      if ((IsAndroid && isAndroidQQ && !MicroMessenger) || (isIos && isIosQQ) || (isIpad && isIosQQ)) {
-        this.downLink = 'https://www.hxsapp.com/download';
-      }
+      // if ((IsAndroid && isAndroidQQ && !MicroMessenger) || (isIos && isIosQQ) || (isIpad && isIosQQ)) {
+      //   this.downLink = 'https://www.hxsapp.com/download';
+      // }
 
       var that = this;
 
@@ -107,13 +115,17 @@ export default {
             height: 59 + shareImgHeight + 'px'
           }
         })
+
+      if (this.linkedMe && this.$common.common.$_GET('shareType') == 1) {
+        com.linkedMe(this.linkedMe)
+      }
     },
     downHxs() {
       if (this.shareImgLink) window.location.href = this.shareImgLink;
     },
     install() {
       // 埋点
-      com.newburiedPoint(this.buriedjson)
+      // com.newburiedPoint(this.buriedjson)
       this.resizeWindow()
     },
     resizeWindow() {
@@ -136,7 +148,7 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style lang='less'>
 .div_none {
   width: 100%;
 }
@@ -148,14 +160,14 @@ export default {
   left: 0;
   bottom: 0;
   z-index: 99;
-  background: url(../assets/img/downloadbg.png) left top no-repeat;
+  background: url(../assets/img/common/downloadbg.png) left top no-repeat;
   background-size: 100% 100%;
 }
 
 .down_hxs .close {
   width: 11px;
   height: 11px;
-  background: url(../assets/img/colse.png) left top no-repeat;
+  background: url(../assets/img/common/colse.png) left top no-repeat;
   background-size: 100%;
   position: absolute;
   right: 7px;
@@ -180,11 +192,11 @@ export default {
 }
 
 .down_hxs .logo {
-  width: 35px;
-  height: 35px;
+  width: 23px;
+	height: 35px;
   border-radius: 5px;
-  background: url(../assets/img/hxslogo60X60.png) left top no-repeat;
-  background-size: 100%;
+  background: url(../assets/img/common/logo.png) left top no-repeat;
+  background-size: 100% 100%;
   float: left;
   margin-right: 7px;
 }
@@ -193,7 +205,7 @@ export default {
   height: 35px;
   line-height: 35px;
   color: #fff;
-  font-size: 18px;
+  font-size: 16px;
   float: left;
 }
 
@@ -222,5 +234,21 @@ export default {
 .downAni-leave-active {
   animation-name: fadeOut;
   animation-duration: .3s;
+}
+
+#LinkedMeDom {
+  display: none;
+  float: right;
+  padding: 0 10px;
+  height: 35px;
+  line-height: 35px;
+  text-align: center;
+  background: #ff68ac;
+  border-radius: 22px;
+  font-size: 14px;
+
+  .linkedme {
+    color: #fff;
+  }
 }
 </style>

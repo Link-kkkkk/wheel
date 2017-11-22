@@ -1,32 +1,63 @@
 <template>
   <div class='warp' :style='warp'>
     <div class='icon' :style='icon'></div>
+    <preload></preload>
+    <down :downLink='href' :linkedMe='linkedMe'></down>
+    <share :actData='actData'></share>
   </div>
 </template>
 <script>
+import com from './../util/common'
 import backimg from '../../static/404.png'
+
+import down from './../components/down'
+import preload from './../components/preload'
+import share from './../components/shareInfo'
+
 export default {
   name: 'init',
+  components: {
+    down,
+    preload,
+    share
+  },
   data() {
     return {
       json: {
-        sess_token: this.$common.common.$_GET('sess_token'),
-        act_id: this.$common.common.$_GET('id'),
-        model_idfa: this.$common.common.$_GET('model_idfa'),
+        sess_token: com.$_GET('sess_token'),
+        act_id: com.$_GET('id'),
+        model_idfa: com.$_GET('model_idfa'),
       },
+      actData: {
+        sess_token: com.$_GET('sess_token'),
+        act_id: com.$_GET('id'),
+        model_idfa: com.$_GET('model_idfa'),
+      },
+      href: 'https://www.hxsapp.com/download',
       utime: this.$common.common.$_GET('utime'),
       sign: this.$common.common.$_GET('sign'),
       pageTitle: '',
       warp: null,
       icon: null,
+      linkedMe: null
+    }
+  },
+  created() {
+    // linkme
+    var __url = 'https://app.hxsapp.com/actweb/seckill/invite/user?id=' + com.$_GET('id');
+    this.linkedMe = {
+      params: {
+        // key 是写死的   value是协议，具体见这里－http://wiki.sys.hxsapp.net/pages/viewpage.action?pageId=1998876
+        "key": "hxsapp://web?url=" + __url
+      }
     }
   },
   mounted() {
     var _this = this
 
     this.$nextTick(function() {
-      this.$common.common.preLoading("stressing");
-      this.$common.actjs.resizeWindow();
+      // this.$common.common.preLoading("stressing");
+      // this.$common.actjs.resizeWindow();
       _this.routerGo();
       var clientH = document.documentElement.clientHeight;
       this.warp = {
@@ -35,50 +66,22 @@ export default {
         'background-color': '#d5dde1',
         'background-size': '100% 100%'
       }
-      this.icon = {
-        'height': '12.166667rem',
-        'width': '17.233333rem',
-        'background': 'url(' + backimg + ') top left no-repeat',
-        'background-size': '100% 100%'
-      }
       $('.warp').css('height', clientH + 'px');
     })
   },
   methods: {
     routerGo() {
       var _this = this
-
-      if (this.$common.common.$_GET('type') == 'milk' || this.$route.name == 'milk') {
-
-      }
-
-      switch (this.$common.common.$_GET('type') || _this.$route.params.type) {
-        case 'bodyCardio':
-          _this.$router.push({ path: '/bodyCardio' })
-          break;
-        case 'bong':
-          _this.$router.push({ path: '/bong' })
-          break;
-        case 'milk':
-          _this.$router.push({ path: '/milk' })
-          break;
-        case 'milkDetail':
-          _this.$router.push({ path: '/milkDetail' })
-          break;
-        case 'mealPowder':
-          _this.$router.push({ path: '/mealPowder' })
-          break;
-        case 'outCardio':
-          _this.$router.push({ path: '/outCardio' })
-          break;
-        case 'outBong':
-          _this.$router.push({ path: '/outBong' })
-          break;
-        case 'vueg':
-          _this.$router.push({ path: '/vueg' })
+      switch (this.$common.common.$_GET('route') || this.$route.params.type) {
+        default:
+          _this.icon = {
+            'height': '12.166667rem',
+            'width': '17.233333rem',
+            'background': 'url(' + backimg + ') top left no-repeat',
+            'background-size': '100% 100%'
+          }
           break;
       }
-
     },
   }
 }
