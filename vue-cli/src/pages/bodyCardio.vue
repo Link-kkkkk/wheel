@@ -1,7 +1,7 @@
 <template>
   <div class="warp">
     <div class='pv' v-if='pvshow'><p>{{pvnum}}</p></div>
-    <img v-for='(data,index) in imgArr' :src='imgArr[index]'>
+    <img v-for='(data,index) in imgArr' :src='imgArr[index]' :key="index">
     <div class="btn" @click="goBuy" :style="btnStyle" v-show='btnshow'>立即购买</div>
   </div>
 </template>
