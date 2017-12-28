@@ -1,0 +1,14 @@
+{
+  "name": "vuenode",
+  "version": "1.0.0",
+  "description": "this is a demo of vue + node",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Link",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.2"
+  }
+}
