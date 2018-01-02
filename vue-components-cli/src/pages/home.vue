@@ -4,7 +4,7 @@
       <el-col :span="24"><p class="header">home component</p></el-col>
     </el-row>
     <el-button :type="loginBtnObj.type" @click='login'>{{loginBtnObj.text}}</el-button>
-    <el-button type="primary" plain>注册</el-button>
+    <el-button type="primary" plain @click='sign'>注册</el-button>
     <transition name='switch'>
       <el-row class="routerBox" v-if='loginType == "master"'>
         <el-col v-for='(item,index) in routerBtnArr' :key='item' @click.native='goRouter(item)' :span="16" class="routerBoxLine" :style='"background:" + $store.state.routerSheet[index].style'>
@@ -23,10 +23,13 @@
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex";
+import Lockr from "lockr";
 export default {
   name: "home",
   computed: {
-    ...mapGetters(["isload"])
+    // ...mapGetters({
+    //   login: state => 123
+    // })
   },
   data() {
     return {
@@ -35,29 +38,42 @@ export default {
         text: "登陆"
       },
       routerBtnArr: [],
-      loginType: "guest"
+      loginType: "guest",
+      logining:false
     };
   },
   created() {
     this.routerBtnArr = this.$store.state.userRouterSheet;
   },
   mounted() {
-    if (this.$store.state.login) {
-      this.loginType = "master";
-      this.loginBtnObj.type = "danger";
-      this.loginBtnObj.text = "登出";
-    } else {
-      this.loginType = "guest";
-      this.loginBtnObj.type = "primary";
-      this.loginBtnObj.text = "登陆";
-    }
+    this.load();
   },
   methods: {
+    load() {
+      this.logining = this.$store.state.login
+      if(!this.logining){
+        if(Lockr.get('login') === 'true'){
+          this.logining = true
+          this.$store.dispatch("UserLogin");
+        }
+      }
+
+      if (this.logining) {
+        this.loginType = "master";
+        this.loginBtnObj.type = "danger";
+        this.loginBtnObj.text = "登出";
+      } else {
+        this.loginType = "guest";
+        this.loginBtnObj.type = "primary";
+        this.loginBtnObj.text = "登陆";
+      }
+    },
     login() {
       let userLogin = this.$store.state.login;
       if (!userLogin) {
         this.open(1);
         this.loginType = "master";
+        this.logining = 'true'
         this.$store.dispatch("UserLogin");
 
         this.loginBtnObj.type = "danger";
@@ -65,6 +81,7 @@ export default {
       } else if (userLogin) {
         this.open(2);
         this.loginType = "guest";
+        this.logining = 'false'
         this.$store.dispatch("UserLogout");
 
         this.loginBtnObj.type = "primary";
@@ -102,6 +119,11 @@ export default {
     },
     guestClick() {
       this.$alert("没有知识的荒原", "登陆先喂", {
+        confirmButtonText: "confirm"
+      });
+    },
+    sign() {
+      this.$alert("暂时没有使用数据库", "oh!", {
         confirmButtonText: "confirm"
       });
     }
