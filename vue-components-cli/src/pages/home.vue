@@ -1,0 +1,139 @@
+<template>
+  <div class="homeContent">
+    <el-row>
+      <el-col :span="24"><p class="header">home component</p></el-col>
+    </el-row>
+    <el-button :type="loginBtnObj.type" @click='login'>{{loginBtnObj.text}}</el-button>
+    <el-button type="primary" plain>注册</el-button>
+    <transition name='switch'>
+      <el-row class="routerBox" v-if='loginType == "master"'>
+        <el-col v-for='(item,index) in routerBtnArr' :key='item' @click.native='goRouter(item)' :span="16" class="routerBoxLine" :style='"background:" + $store.state.routerSheet[index].style'>
+          <p>{{item}}</p>
+        </el-col>
+      </el-row>
+    </transition>
+    <transition name='switch'>
+      <el-row class="routerBox" v-if='loginType == "guest"'>
+        <el-col @click.native='guestClick()' :span="16" class="routerBoxLine guestBtn">
+          <p>guestMode</p>
+        </el-col>
+      </el-row>
+    </transition>
+  </div>
+</template>
+<script>
+import { mapActions, mapGetters } from "vuex";
+export default {
+  name: "home",
+  computed: {
+    ...mapGetters(["isload"])
+  },
+  data() {
+    return {
+      loginBtnObj: {
+        type: "primary",
+        text: "登陆"
+      },
+      routerBtnArr: [],
+      loginType: "guest"
+    };
+  },
+  created() {
+    this.routerBtnArr = this.$store.state.userRouterSheet;
+  },
+  mounted() {
+    if (this.$store.state.login) {
+      this.loginType = "master";
+      this.loginBtnObj.type = "danger";
+      this.loginBtnObj.text = "登出";
+    } else {
+      this.loginType = "guest";
+      this.loginBtnObj.type = "primary";
+      this.loginBtnObj.text = "登陆";
+    }
+  },
+  methods: {
+    login() {
+      let userLogin = this.$store.state.login;
+      if (!userLogin) {
+        this.open(1);
+        this.loginType = "master";
+        this.$store.dispatch("UserLogin");
+
+        this.loginBtnObj.type = "danger";
+        this.loginBtnObj.text = "登出";
+      } else if (userLogin) {
+        this.open(2);
+        this.loginType = "guest";
+        this.$store.dispatch("UserLogout");
+
+        this.loginBtnObj.type = "primary";
+        this.loginBtnObj.text = "登陆";
+      }
+    },
+    open(type) {
+      switch (type) {
+        case 1:
+          var alertType = "success";
+          var alertTxt = "登陆成功";
+          break;
+        case 2:
+          var alertType = "warning";
+          var alertTxt = "登出成功";
+          break;
+        default:
+          console.log("no type");
+      }
+
+      // const h = this.$createElement;
+      // this.$notify({
+      //   title: alertTxt,
+      //   duration: 2000,
+      //   type: alertType
+      // });
+
+      this.$message({
+        message: alertTxt,
+        type: alertType
+      });
+    },
+    goRouter(route) {
+      this.$router.push({ name: route });
+    },
+    guestClick() {
+      this.$alert("没有知识的荒原", "登陆先喂", {
+        confirmButtonText: "confirm"
+      });
+    }
+  }
+};
+</script>
+<style lang="less" scoped>
+@import "./../util/reset.less";
+@import "./../util/animate.css";
+
+.routerBox {
+  margin: 50px 20px;
+}
+.routerBoxLine {
+  cursor: pointer;
+  margin: 5px auto;
+  padding: 20px;
+  border-radius: 20px;
+}
+
+.guestBtn {
+  background-image: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);
+}
+
+.switch-enter-active {
+  animation-name: slideInLeft;
+  animation-duration: 0.5s;
+}
+.switch-leave-active {
+  animation-name: slideOutLeft;
+  animation-duration: 0.5s;
+}
+</style>
+
+
