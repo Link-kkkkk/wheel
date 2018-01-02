@@ -10,7 +10,8 @@ Vue.use(Vuex)
 const state = {
   isload:false,
   login:false, 
-
+  routerLoaded: false,
+  
   routerSheet:[
     {name:'Mercury',style:'linear-gradient(to right, #4facfe 0%, #00f2fe 100%)'},
     {name:'Venus',style:'linear-gradient(to right, #fa709a 0%, #fee140 100%)'},

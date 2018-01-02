@@ -14,6 +14,10 @@ const userLogout = (state) => {
   Lockr.set('login', 'false');
 }
 
+const routerLoaded = (state) => {
+  state.routerLoaded = true
+}
+
 const saveRouter = (state, newSheet) => {
   state.userRouterSheet = newSheet
 }
@@ -30,6 +34,7 @@ export {
   loadRouter,
   userLogin,
   userLogout,
+  routerLoaded,
   saveRouter,
 
   test

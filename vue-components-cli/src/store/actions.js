@@ -10,6 +10,10 @@ const UserLogout = ({ commit }) => {
   commit('userLogout')
 }
 
+const RouterLoaded = ({ commit }) => {
+  commit('routerLoaded')
+}
+
 const SaveRouter = ({ commit }, newSheet) => {
   commit('saveRouter', newSheet)
 }
@@ -23,6 +27,7 @@ export {
   UserLogin,
   UserLogout,
   SaveRouter,
-
+  RouterLoaded,
+  
   Test
 }

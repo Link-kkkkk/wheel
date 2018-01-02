@@ -7,7 +7,7 @@
     <el-button type="primary" plain @click='sign'>注册</el-button>
     <transition name='switch'>
       <el-row class="routerBox" v-if='loginType == "master"'>
-        <el-col v-for='(item,index) in routerBtnArr' :key='item' @click.native='goRouter(item)' :span="16" class="routerBoxLine" :style='"background:" + $store.state.routerSheet[index].style'>
+        <el-col v-for='(item,index) in $store.state.userRouterSheet' :key='item' @click.native='goRouter(item)' :span="16" class="routerBoxLine" :style='"background:" + $store.state.routerSheet[index].style'>
           <p>{{item}}</p>
         </el-col>
       </el-row>
@@ -24,13 +24,10 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import Lockr from "lockr";
+import com from "./../util/common"
+
 export default {
   name: "home",
-  computed: {
-    // ...mapGetters({
-    //   login: state => 123
-    // })
-  },
   data() {
     return {
       loginBtnObj: {
@@ -39,22 +36,21 @@ export default {
       },
       routerBtnArr: [],
       loginType: "guest",
-      logining:false
+      logining: false
     };
-  },
-  created() {
-    this.routerBtnArr = this.$store.state.userRouterSheet;
   },
   mounted() {
     this.load();
+    this.routerBtnArr = this.$store.state.userRouterSheet;
   },
   methods: {
     load() {
-      this.logining = this.$store.state.login
-      if(!this.logining){
-        if(Lockr.get('login') === 'true'){
-          this.logining = true
+      this.logining = this.$store.state.login;
+      if (!this.logining) {
+        if (Lockr.get("login") === "true") {
+          this.logining = true;
           this.$store.dispatch("UserLogin");
+          // this.loadingRouter();
         }
       }
 
@@ -70,10 +66,16 @@ export default {
     },
     login() {
       let userLogin = this.$store.state.login;
+      if (!userLogin && Lockr.get("login") === "false") {
+        if(this.$store.state.routerLoaded === false){
+          com.loadingRouter();
+        }
+      }
+
       if (!userLogin) {
         this.open(1);
         this.loginType = "master";
-        this.logining = 'true'
+        this.logining = "true";
         this.$store.dispatch("UserLogin");
 
         this.loginBtnObj.type = "danger";
@@ -81,7 +83,7 @@ export default {
       } else if (userLogin) {
         this.open(2);
         this.loginType = "guest";
-        this.logining = 'false'
+        this.logining = "false";
         this.$store.dispatch("UserLogout");
 
         this.loginBtnObj.type = "primary";
@@ -101,19 +103,37 @@ export default {
         default:
           console.log("no type");
       }
-
-      // const h = this.$createElement;
-      // this.$notify({
-      //   title: alertTxt,
-      //   duration: 2000,
-      //   type: alertType
-      // });
-
       this.$message({
         message: alertTxt,
         type: alertType
       });
     },
+    // loadingRouter() {
+    //   var _this = this;
+    //   var routerSheet = [];
+    //   var userIdentity = "";
+    //   var route = [];
+    //   var storeSheet = this.$store.state.routerSheet;
+      
+    //   this.$store.dispatch("RouterLoaded", routerSheet);
+
+    //   for (let i = 0; i < storeSheet.length; i++) {
+    //     changeRoute(storeSheet[i].name);
+    //     routerSheet.push(storeSheet[i].name);
+    //   }
+    //   this.$store.dispatch("SaveRouter", routerSheet);
+
+    //   function changeRoute(routeName) {
+    //     route = [
+    //       {
+    //         path: "/" + routeName,
+    //         component: star,
+    //         name: routeName
+    //       }
+    //     ];
+    //     _this.$router.addRoutes(route);
+    //   }
+    // },
     goRouter(route) {
       this.$router.push({ name: route });
     },
