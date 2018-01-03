@@ -4,7 +4,7 @@
       <el-col :span="24"><p class="header">home component</p></el-col>
     </el-row>
     <el-button :type="loginBtnObj.type" @click='login'>{{loginBtnObj.text}}</el-button>
-    <el-button type="primary" plain @click='sign'>注册</el-button>
+    <el-button type="primary" plain @click='sign' v-if='loginType == "guest"'>注册</el-button>
     <transition name='switch'>
       <el-row class="routerBox" v-if='loginType == "master"'>
         <el-col v-for='(item,index) in $store.state.userRouterSheet' :key='item' @click.native='goRouter(item)' :span="16" class="routerBoxLine" :style='"background:" + $store.state.routerSheet[index].style'>
@@ -50,7 +50,6 @@ export default {
         if (Lockr.get("login") === "true") {
           this.logining = true;
           this.$store.dispatch("UserLogin");
-          // this.loadingRouter();
         }
       }
 
@@ -108,32 +107,6 @@ export default {
         type: alertType
       });
     },
-    // loadingRouter() {
-    //   var _this = this;
-    //   var routerSheet = [];
-    //   var userIdentity = "";
-    //   var route = [];
-    //   var storeSheet = this.$store.state.routerSheet;
-      
-    //   this.$store.dispatch("RouterLoaded", routerSheet);
-
-    //   for (let i = 0; i < storeSheet.length; i++) {
-    //     changeRoute(storeSheet[i].name);
-    //     routerSheet.push(storeSheet[i].name);
-    //   }
-    //   this.$store.dispatch("SaveRouter", routerSheet);
-
-    //   function changeRoute(routeName) {
-    //     route = [
-    //       {
-    //         path: "/" + routeName,
-    //         component: star,
-    //         name: routeName
-    //       }
-    //     ];
-    //     _this.$router.addRoutes(route);
-    //   }
-    // },
     goRouter(route) {
       this.$router.push({ name: route });
     },

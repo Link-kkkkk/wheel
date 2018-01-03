@@ -36,6 +36,8 @@ var router = new Router({
     }
   ]
 })
+// 要先暴露给公用方法
+export default router
 
 var routerSheet = [];
 var userIdentity = '';
@@ -45,32 +47,11 @@ var logining = store.state.login
 if (!logining) {
   if (Lockr.get('login') === 'true') {
     logining = true
-    loadingRouter()
+    com.loadingRouter()
     // store.dispatch("UserLogin");
   }
 } else if (logining) {
-  loadingRouter()
-}
-
-function loadingRouter() {
-  var storeSheet = store.state.routerSheet
-
-  for (let i = 0; i < storeSheet.length; i++) {
-    changeRoute(storeSheet[i].name)
-    router.addRoutes(route)
-
-    routerSheet.push(storeSheet[i].name)
-  }
-  store.dispatch("SaveRouter", routerSheet)
-}
-
-function changeRoute(routeName) {
-  var route = [{
-    path: '/' + routeName,
-    component: star,
-    name: routeName,
-  }]
-  router.addRoutes(route)
+  com.loadingRouter()
 }
 
 // 动态操作路由404页面要在最后push进数组
@@ -82,5 +63,3 @@ var errorPage = [
   }
 ];
 router.addRoutes(errorPage);
-
-export default router

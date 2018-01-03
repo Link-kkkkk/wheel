@@ -1,5 +1,6 @@
 import store from './../store/store'
 import router from './../router/index'
+
 const star = r => require.ensure([], () => r(require("../pages/star.vue")));
 const error = r => require.ensure([], () => r(require("../pages/error.vue")));
 
