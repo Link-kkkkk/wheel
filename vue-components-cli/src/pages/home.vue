@@ -23,7 +23,6 @@
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex";
-import Lockr from "lockr";
 import com from "./../util/common"
 
 export default {
