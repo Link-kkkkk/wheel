@@ -8,7 +8,10 @@ router.get('/:name', function (req, res) {
     // include组件的参数同样是在这里render的
     title: 'hi ' + req.params.name,
     name: req.params.name,
-    supplies: ['mop', 'broom', 'duster']
+    supplies: ['mop', 'broom', 'duster'],
+    commonJson:{
+      activeNav: '3'
+    }
   })
 })
 

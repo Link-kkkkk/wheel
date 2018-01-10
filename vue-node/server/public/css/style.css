@@ -32,7 +32,19 @@ input::-webkit-inner-spin-button {
 .clearfix {
   zoom: 1;
 }
+.mine_btn {
+  float: right;
+}
+.mine_btn:after {
+  clear: both;
+}
 .title {
+  text-align: center;
+  padding-top: 20px;
+  color: #a18cd1;
+  font-size: 20px;
+}
+.sub_title {
   text-align: center;
   padding-top: 20px;
 }

@@ -4,9 +4,56 @@
 <head>
   <!-- 引入样式 -->
   <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+
   <link rel="stylesheet" href="/css/reset.css">
+
   <title>
     <%= title %>
   </title>
 </head>
+
 <body>
+  <div class="content">
+    <div class="header">
+      <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect" background-color="#545c64"
+        text-color="#fff" active-text-color="#ffd04b">
+        <el-menu-item index="1">处理中心</el-menu-item>
+        <el-submenu index="2">
+          <template slot="title">我的工作台</template>
+          <el-menu-item index="2-1">table1</el-menu-item>
+          <el-menu-item index="2-2">table2</el-menu-item>
+          <el-menu-item index="2-3">table3</el-menu-item>
+        </el-submenu>
+        <% if(name != null){ %>
+          <el-submenu index="3">
+            <template slot="title">
+              <span><%= name %></span>
+            </template>
+            <el-menu-item index="3-1">
+              <a href=/user/<%= name %>>个人中心</a>
+            </el-menu-item>
+            <el-menu-item index="3-2">
+              <a href=/signup/>登出</a>
+            </el-menu-item>
+          </el-submenu>
+        <% } else { %>
+          <el-menu-item index="3">
+            <a href="/signin/">登陆</a>
+          </el-menu-item>
+        <% } %>
+        <!-- <el-menu-item index="3">
+          <% if(name != null){ %>
+            <a href=/user/<%= name %>><%= name %></a>
+          <% } else { %>
+            <a href="/signin/">登陆</a>
+          <% } %>
+        </el-menu-item> -->
+        <% if(name == null){ %>
+          <el-menu-item index="4">
+            <a href="/signup/">注册</a>
+          </el-menu-item>
+        <% } %>
+      </el-menu>
+    </div>

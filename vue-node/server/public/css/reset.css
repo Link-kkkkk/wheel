@@ -32,3 +32,9 @@ input::-webkit-inner-spin-button {
 .clearfix {
   zoom: 1;
 }
+.mine_btn {
+  float: right;
+}
+.mine_btn:after {
+  clear: both;
+}
