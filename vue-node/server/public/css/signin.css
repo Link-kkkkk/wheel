@@ -38,16 +38,13 @@ input::-webkit-inner-spin-button {
 .mine_btn:after {
   clear: both;
 }
-.signinContent .title {
+.title {
   text-align: center;
   padding-top: 20px;
   color: #a18cd1;
   font-size: 20px;
 }
-.signinContent .sub_title {
+.sub_title {
   text-align: center;
-  padding: 20px 0;
-}
-.signupContent .input_box {
-  padding: 0 20%;
+  padding-top: 20px;
 }

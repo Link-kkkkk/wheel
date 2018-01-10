@@ -1,26 +1,4 @@
   </div>
 </body>
 
-<script>
-  // ejs写vue好像只能这样了
-  var app = new Vue({
-    el: '.content',
-    data() {
-      return {
-        activeIndex:''
-      }
-    },
-    mounted() {
-      // this.open()
-    },
-    methods: {
-      open() {
-        this.$message('这是一条消息提示');
-      },
-      handleSelect(key, keyPath) {
-        console.log(key, keyPath);
-      }
-    }
-  })
-</script>
 </html>
