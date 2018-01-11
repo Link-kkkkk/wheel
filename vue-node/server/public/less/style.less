@@ -1,5 +1,25 @@
 @import url('./reset.less');
 
+.header{
+  position: relative;
+  .nav-setting {
+    position: absolute;
+    right: 30px;
+    top: 35px;
+    z-index: 999;
+  }
+  
+  .nav-setting .ui.dropdown.button {
+    padding: 10px 10px 0 10px;
+    background-color: #fff !important;
+  }
+  
+  .nav-setting .icon.bars {
+    color: #000;
+    font-size: 18px;
+  }
+}
+
 .signinContent{
   .title{
     text-align: center;

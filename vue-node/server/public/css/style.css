@@ -38,6 +38,23 @@ input::-webkit-inner-spin-button {
 .mine_btn:after {
   clear: both;
 }
+.header {
+  position: relative;
+}
+.header .nav-setting {
+  position: absolute;
+  right: 30px;
+  top: 35px;
+  z-index: 999;
+}
+.header .nav-setting .ui.dropdown.button {
+  padding: 10px 10px 0 10px;
+  background-color: #fff !important;
+}
+.header .nav-setting .icon.bars {
+  color: #000;
+  font-size: 18px;
+}
 .signinContent .title {
   text-align: center;
   padding-top: 20px;

@@ -9,6 +9,7 @@ const pkg = require('./../package')
 
 const app = express()
 
+app.setMaxListeners(99)
 // 设置模板目录
 app.set('views', path.join(__dirname, 'views'))
 // 设置模板引擎为 ejs
@@ -50,7 +51,8 @@ app.use(require('express-formidable')({
 // 设置模板全局常量
 app.locals.blog = {
   title: pkg.name,
-  description: pkg.description
+  description: pkg.description,
+  name: pkg.author
 }
 
 // 添加模板必需的三个变量

@@ -1,13 +1,20 @@
 <%- include('../components/header') %>
-<!-- 服务器静态路径根路径就是public -->
 
-<div class="signinContent">
-  <p class="title">blog</p>
-  <% if(name != null){ %>
-    <p class="sub_title">author <%= name %></p>
-  <% } else { %>
-    <p class="sub_title">hello world</p>
-  <% } %>
+<div class="ui grid">
+  <div class="four wide column"></div>
+  <div class="eight wide column">
+    <form class="ui form segment" method="post">
+      <div class="field required">
+        <label>用户名</label>
+        <input placeholder="用户名" type="text" name="name">
+      </div>
+      <div class="field required">
+        <label>密码</label>
+        <input placeholder="密码" type="password" name="password">
+      </div>
+      <input type="submit" class="ui button fluid" value="登录">
+    </form>  
+  </div>
 </div>
 
-<%- include('../components/footer') %> 
+<%- include('../components/footer') %>
