@@ -17,11 +17,6 @@
 
 <body>
   <div class="content">
-    <div class="errorBox">
-      <% if (error) { %>
-        <div><%= error %> </div>
-      <% } %>
-    </div>
     <div class="header">
       <div class="signinContent">
         <p class="title">blog</p>
@@ -33,4 +28,7 @@
         
         <%- include('navSetting') %>
       </div>
+    </div>
+    <div class="errorBox">
+      <%- include('error') %>
     </div>

@@ -43,7 +43,7 @@ router.post('/', checkNotLogin, function (req, res, next) {
     }
   } catch (e) {
     // 注册失败，异步删除上传的头像
-    fs.unlink(req.files.avatar.path,function(error){
+    fs.unlink(req.files.avatar.path,(err) => {
       req.flash('error', 'fs模块error')
     })
     req.flash('error', e.message)
@@ -76,7 +76,8 @@ router.post('/', checkNotLogin, function (req, res, next) {
     })
     .catch(function (e) {
       // 注册失败，异步删除上传的头像
-      fs.unlink(req.files.avatar.path,function(error){
+      // 划重点，fs必须要有回调函数，不然会报dep00013的错误
+      fs.unlink(req.files.avatar.path,(err) =>{
         req.flash('error', 'fs模块error')
       })
       // 用户名被占用则跳回注册页，而不是错误页
